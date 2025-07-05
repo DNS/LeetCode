@@ -1,6 +1,7 @@
 
 
-def func1 (s:str, p:str) -> bool:
+def isMatch (s:str, p:str) -> bool:
+#def func1 (s:str, p:str) -> bool:
 	# string length
 	sl = len(s)
 	pl = len(p)
@@ -22,19 +23,16 @@ def func1 (s:str, p:str) -> bool:
 				dp[i][j] = dp[i - 1][j - 1]
 
 	#for i in range(1, sl+1):
-		
-		
-		
+	
 	return dp[sl][pl]
 	
 	
 
-b = func1('aa', 'a')
-b = func1('aa', '*')
-b = func1('cb', '?a')
+#b = func1('aa', 'a')
+#b = func1('aa', '*')
+#b = func1('cb', '?a')
 
-
-print(b)
+#print(b)
 
 
 
