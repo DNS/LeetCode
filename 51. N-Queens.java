@@ -14,7 +14,7 @@ class Solution {
             solutions.add(constructString(board));
             return;
         }
-
+		
         for (int col=0; col<board.length; col++) {
             if (isValid(board, row, col)) {
                 board[row][col]='Q';
@@ -30,13 +30,13 @@ class Solution {
                 return false;
             }
         }
-
+		
         for (int i=row-1 , j=col-1; i>=0 && j>=0; i--, j--) {
             if (board[i][j] == 'Q') {
                 return false;
             }
         }
-
+		
         for (int i=row-1 , j=col+1; i>=0 && j<board.length; i--, j++) {
             if (board[i][j]=='Q') {
                 return false;
@@ -55,7 +55,7 @@ class Solution {
                 board[i][j] = '.';
             }
         }
-
+		
         backtrack(solutions, board, 0);
 		
 		return solutions;
