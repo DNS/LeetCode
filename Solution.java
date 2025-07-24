@@ -33,39 +33,28 @@ class Solution {
 		}
 	}
 	
-	public static boolean IsValid (char[][] board, int n, int pos_i, int pos_j) {
-		// check horizontal
-		for (int i=0; i<n; i++) {
-			if (i == pos_i)
-				continue;
-			if (board[i][pos_j] == 'Q')
+	public static boolean IsValid (char[][] board, int n, int x, int y) {
+		for (int t=0; t<n; t++) {
+			// check vertical (y)
+			if (board[t][y] == 'Q') {
+				System.out.printf( "vertical hit: %d, %d\n", t, y );
 				return false;
+			}
+			
+			// check horizontal (x)
+			if (board[x][t] == 'Q') {
+				System.out.printf( "horizontal hit: %d, %d\n", x, t );
+				return false;
+			}
 		}
 		
-		// check vertical
-		for (int j=0; j<n; j++) {
-			if (j == pos_j)
-				continue;
-			if (board[pos_i][j] == 'Q')
-				return false;
-			
+		
+		// check diagonally
+		if (Math.abs(x1 - x2) == Math.abs(y1 - y2)) {
+			return true;
 		}
 		
-		// check diagonal (top-left to bottom-right)
-		//for (int i=0, j=0; i<n, j<n; i++, j++) {
-			
-		//}
 		
-		//for (int j=0; j<n; j++) {
-			
-		//}
-		
-		
-		// check diagonal (top-right to bottom-left)
-		
-		
-		//if (i == pos_i && j == pos_j)
-		//	continue;
 		
 		return true;
 	}
@@ -89,12 +78,14 @@ class Solution {
 		
 		int n = 4;
 		char[][] board = CreateBoard(n);
+		board[0][3] = 'Q';
 		//PrintBoard(board, n);
 		
 		
-		//boolean b = CheckAttack(board1, pos);
+		boolean b = IsValid(board, n, 0, 2);
 		
-		System.out.println( board[0] );
+		System.out.println( b );
+		
 	}
 	
 	/*
