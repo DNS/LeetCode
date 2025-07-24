@@ -36,16 +36,10 @@ class Solution {
 	public static boolean IsValid (char[][] board, int n, int x, int y) {
 		for (int t=0; t<n; t++) {
 			// check vertical (y)
-			if (board[t][y] == 'Q') {
-				//System.out.printf( "vertical hit: %d, %d\n", t, y );
-				return false;
-			}
+			if (board[t][y] == 'Q') return false;
 			
 			// check horizontal (x)
-			if (board[x][t] == 'Q') {
-				//System.out.printf( "horizontal hit: %d, %d\n", x, t );
-				return false;
-			}
+			if (board[x][t] == 'Q') return false;
 		}
 		
 		// check diagonally
@@ -55,12 +49,8 @@ class Solution {
 		for (int i=0; i<n; i++) {
 			if (i == x) continue;
 			for (int j=0; j<n; j++) {
-				//System.out.printf( ": %d,%d - %d,%d\n", j,y , i,x );
 				int m = (j-y) / (i-x);
-				if (board[i][j] == 'Q' && (m == 1 || m == -1)) {
-					//System.out.printf( "diagonal hit: %d, %d\n", i, j );
-					return false;
-				}
+				if (board[i][j] == 'Q' && (m == 1 || m == -1)) return false;
 			}
 		}
 		
@@ -68,32 +58,61 @@ class Solution {
 		return true;
 	}
 	
-	public static char[][] TryQueen (char[][] board, int n) {
+	public static char[][] TryQueen (int n, int x, int y) {
+		char[][] board = CreateBoard(n);
+		board[x][y] = 'Q';
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<n; j++) {
-				if (IsValid(board, n, i, j)) {
-					board[i][j] = 'Q';
-				}
-				//System.out.print( board[i][j] );
+				if (x==i && y==j) continue;
+				if (IsValid(board, n, i, j)) board[i][j] = 'Q';
 			}
-			//System.out.println(  );
 		}
+		
+		// count queens on the board
+		int q = 0;
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<n; j++) {
+				if (board[i][j] == 'Q') q++;
+			}
+		}
+		
+		//if (q == n) PrintBoard(board, n);
+		
 		
 		return board;
 	}
 	
+	public static void RemoveDuplicate(ArrayList<char[][]> list, int n) {
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<n; j++) {
+				
+			}
+		}
+		
+		for (char[][] i : list) {
+            PrintBoard(i,n);
+        }
+	}
+	
 	public static void main (String[] args) {
 		//List<List<String>> board = solveNQueens(1);
+		List<char[][]> boards = new ArrayList<>();
 		
-		int n = 5;
+		int n = 4;
 		char[][] board = CreateBoard(n);
-		TryQueen(board, n);
-		//board[2][3] = 'Q';
-		PrintBoard(board, n);
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<n; j++) {
+				char[][] b = TryQueen(n, i, j);
+				//PrintBoard(b, n);
+				//System.out.println("-------");
+				
+				boards.add( b );
+				
+			}
+		}
 		
-		
-		//boolean b = IsValid(board, n, 1, 2);
-		//System.out.println( b );
+		//PrintBoard( boards.get(), n);
+		//removeDuplicate(boards);
 		
 	}
 	
