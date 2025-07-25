@@ -2,10 +2,6 @@ import java.util.*;
 
 class Solution {
     
-	public static boolean CheckAttack (int[][] board, int[] position) {
-		position[0] = 777;
-		return false;
-	}
 	
 	public static List<List<String>> solveNQueens (int n) {
 		List<List<String>> solutions = new ArrayList<>();
@@ -124,7 +120,7 @@ class Solution {
 	}
 	
 	public static void main (String[] args) {
-		//List<List<String>> board = solveNQueens(1);
+		
 		List<char[][]> list = new ArrayList<>();
 		
 		int n = 4;
@@ -140,7 +136,15 @@ class Solution {
 			}
 		}
 		
-		PrintList(list, n);
+		List<List<String>> list_final = new ArrayList<>();
+		for (int t=0; t<list.size; t++) {
+			List<String> l = new ArrayList<>();
+			list_final.add(new String(list.get(0)[0]) );
+		} 
+		
+		//PrintList(list, n);
+		String s = new String(list.get(0)[0]);
+		System.out.println(s);
 		
 	}
 	
