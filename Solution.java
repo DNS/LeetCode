@@ -111,31 +111,39 @@ class Solution {
 		}
 	}
 	
+	public static boolean CheckDuplicate (List<char[][]> list, char[][] board, int n) {
+		for (int t=0; t<list.size(); t++) {
+			int cmp_result = 0;
+			for (int i=0; i<n; i++) {
+				if ( Arrays.equals(list.get(t)[i], board[i]) ) cmp_result++;
+			}
+			if (cmp_result == n) return true;
+		}
+		
+		return false;
+	}
+	
 	public static void main (String[] args) {
 		//List<List<String>> board = solveNQueens(1);
 		List<char[][]> list = new ArrayList<>();
 		
 		int n = 4;
-		//char[][] board = CreateBoard(n);
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<n; j++) {
 				char[][] board = CreateBoard(n);
-				boolean b = TryQueen(board, n, i, j);
-				if (b) list.add( board );
+				
+				// try put queen on the board
+				if (TryQueen(board, n, i, j))
+					if (!CheckDuplicate( list, board, n ))
+						list.add( board );
 				
 			}
 		}
 		
 		PrintList(list, n);
-		//PrintBoard( boards.get(), n);
-		//removeDuplicate(boards);
 		
 	}
 	
-	/*
-	public static void main (String []args) {
-		System.out.println( "hello" );
-	}*/
 }
 
 
