@@ -6,15 +6,12 @@ class Solution {
 	public static List<List<String>> solveNQueens (int n) {
 		List<char[][]> list = new ArrayList<>();
 		
-		//int n = 4;
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<n; j++) {
-				char[][] board = CreateBoard(n);
-				
 				// try put queen on the board
-				if (TryQueen(board, n, i, j))
-					if (!CheckDuplicate( list, board, n ))
-						list.add( board );
+				char[][] board = CreateBoard(n);
+				TryQueen(list, board, n, i, j, 0, 0);
+				
 				
 			}
 		}
@@ -34,11 +31,10 @@ class Solution {
 	
 	public static char[][] CreateBoard (int n) {
 		char[][] board = new char[n][n];
-		for (int i=0; i<n; i++) {
-			for (int j=0; j<n; j++) {
+		for (int i=0; i<n; i++)
+			for (int j=0; j<n; j++)
 				board[i][j] = '.';
-			}
-		}
+		
 		return board;
 	}
 	
@@ -69,7 +65,10 @@ class Solution {
 			if (i == x) continue;
 			for (int j=0; j<n; j++) {
 				int m = (j-y) / (i-x);
-				if (board[i][j] == 'Q' && (m == 1 || m == -1)) return false;
+				if (board[i][j] == 'Q' && (m == 1 || m == -1)) {
+					//System.out.printf("%d,%d\n", i,j);
+					return false;
+				}
 			}
 		}
 		
@@ -77,13 +76,17 @@ class Solution {
 		return true;
 	}
 	
-	public static boolean TryQueen (char[][] board, int n, int x, int y) {
-		//char[][] board = CreateBoard(n);
+	// backtrack
+	public static void TryQueen (List<char[][]> list, char[][] board, int n, int x, int y, int k, int l) {
 		board[x][y] = 'Q';
-		for (int i=0; i<n; i++) {
-			for (int j=0; j<n; j++) {
+		for (int i=k; i<n; i++) {
+			for (int j=l; j<n; j++) {
 				if (x==i && y==j) continue;
-				if (IsValid(board, n, i, j)) board[i][j] = 'Q';
+				if (IsValid(board, n, i, j)) {					
+					//if (j+1 < n) 
+					//	TryQueen(list, board, n, x, y, i, j+1);
+					board[i][j] = 'Q';
+				}
 			}
 		}
 		
@@ -95,12 +98,17 @@ class Solution {
 			}
 		}
 		
+		
+		
+		
 		if (q == n) {
 			//PrintBoard(board, n);
-			return true;
-		} else {
-			return false;
-		}
+			if (!CheckDuplicate( list, board, n ))
+				list.add( board );
+			//return true;
+		}// else {
+		//	return false;
+		//}
 			
 	}
 	
@@ -147,34 +155,6 @@ class Solution {
 	
 	
 	public static void main (String[] args) {
-		/*
-		List<char[][]> list = new ArrayList<>();
-		
-		int n = 4;
-		for (int i=0; i<n; i++) {
-			for (int j=0; j<n; j++) {
-				char[][] board = CreateBoard(n);
-				
-				// try put queen on the board
-				if (TryQueen(board, n, i, j))
-					if (!CheckDuplicate( list, board, n ))
-						list.add( board );
-				
-			}
-		}
-		
-		List<List<String>> list_final = new ArrayList<>();
-		
-		for (int t=0; t<list.size(); t++) {
-			List<String> l = new ArrayList<>();
-			for (int i=0; i<n; i++) {
-				l.add( new String(list.get(t)[i]) );
-			}
-			list_final.add( l );
-		}
-		
-		
-		*/
 		int n = 5;
 		List<List<String>> list_final = solveNQueens(n);
 		PrintListList(list_final, n);
