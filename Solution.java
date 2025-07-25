@@ -29,8 +29,9 @@ class Solution {
 			for (int j=0; j<n; j++) {
 				System.out.print( board[i][j] );
 			}
-			System.out.println(  );
+			System.out.println( );
 		}
+		System.out.println("------");
 	}
 	
 	public static boolean IsValid (char[][] board, int n, int x, int y) {
@@ -58,8 +59,8 @@ class Solution {
 		return true;
 	}
 	
-	public static char[][] TryQueen (int n, int x, int y) {
-		char[][] board = CreateBoard(n);
+	public static boolean TryQueen (char[][] board, int n, int x, int y) {
+		//char[][] board = CreateBoard(n);
 		board[x][y] = 'Q';
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<n; j++) {
@@ -76,41 +77,56 @@ class Solution {
 			}
 		}
 		
-		//if (q == n) PrintBoard(board, n);
-		
-		
-		return board;
+		if (q == n) {
+			//PrintBoard(board, n);
+			return true;
+		} else {
+			return false;
+		}
+			
 	}
 	
-	public static void RemoveDuplicate(ArrayList<char[][]> list, int n) {
-		for (int i=0; i<n; i++) {
-			for (int j=0; j<n; j++) {
-				
+	public static boolean RemoveDuplicate(List<char[][]> list, char[][] board, int n) {
+		for (int t=0; t<n; t++) {
+			if ( Arrays.equals(list.get(t), board) ) {
+				System.out.printf("%d\n", t);
+				return false;
 			}
 		}
 		
-		for (char[][] i : list) {
-            PrintBoard(i,n);
-        }
+		return true;
+	}
+	
+	public static void PrintList (List<char[][]> list, int n) {
+		for (int t=0; t<list.size(); t++) {
+			for (int i=0; i<n; i++) {
+				System.out.println( list.get(t)[i] );
+				//for (int j=0; j<n; j++) {
+					
+				//}
+				
+			}
+			System.out.println( "-------" );
+			
+		}
 	}
 	
 	public static void main (String[] args) {
 		//List<List<String>> board = solveNQueens(1);
-		List<char[][]> boards = new ArrayList<>();
+		List<char[][]> list = new ArrayList<>();
 		
 		int n = 4;
-		char[][] board = CreateBoard(n);
+		//char[][] board = CreateBoard(n);
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<n; j++) {
-				char[][] b = TryQueen(n, i, j);
-				//PrintBoard(b, n);
-				//System.out.println("-------");
-				
-				boards.add( b );
+				char[][] board = CreateBoard(n);
+				boolean b = TryQueen(board, n, i, j);
+				if (b) list.add( board );
 				
 			}
 		}
 		
+		PrintList(list, n);
 		//PrintBoard( boards.get(), n);
 		//removeDuplicate(boards);
 		
@@ -121,6 +137,10 @@ class Solution {
 		System.out.println( "hello" );
 	}*/
 }
+
+
+
+
 
 
 
