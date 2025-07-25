@@ -96,14 +96,18 @@ class Solution {
 	public static void PrintList (List<char[][]> list, int n) {
 		for (int t=0; t<list.size(); t++) {
 			for (int i=0; i<n; i++) {
-				System.out.println( list.get(t)[i] );
-				//for (int j=0; j<n; j++) {
-					
-				//}
-				
+				System.out.println( list.get(t)[i] );				
 			}
 			System.out.println( "-------" );
-			
+		}
+	}
+	
+	public static void PrintListList (List<List<String>> list_final, int n) {
+		for (int t=0; t<list_final.size(); t++) {
+			for (int i=0; i<list_final.get(t).size(); i++) {
+				System.out.println( list_final.get(t).get(i) );
+			}
+			System.out.println( "-------" );
 		}
 	}
 	
@@ -137,14 +141,20 @@ class Solution {
 		}
 		
 		List<List<String>> list_final = new ArrayList<>();
-		for (int t=0; t<list.size; t++) {
-			List<String> l = new ArrayList<>();
-			list_final.add(new String(list.get(0)[0]) );
-		} 
 		
+		for (int t=0; t<list.size(); t++) {
+			List<String> l = new ArrayList<>();
+			for (int i=0; i<n; i++) {
+				l.add( new String(list.get(t)[i]) );
+			}
+			list_final.add( l );
+		}
+		
+		
+		PrintListList(list_final, n);
 		//PrintList(list, n);
-		String s = new String(list.get(0)[0]);
-		System.out.println(s);
+		//String s = new String(list.get(0)[0]);
+		//System.out.println(s);
 		
 	}
 	
