@@ -4,10 +4,32 @@ class Solution {
     
 	
 	public static List<List<String>> solveNQueens (int n) {
-		List<List<String>> solutions = new ArrayList<>();
-		//solutions.add(constructString(board));
+		List<char[][]> list = new ArrayList<>();
 		
-		return solutions;
+		//int n = 4;
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<n; j++) {
+				char[][] board = CreateBoard(n);
+				
+				// try put queen on the board
+				if (TryQueen(board, n, i, j))
+					if (!CheckDuplicate( list, board, n ))
+						list.add( board );
+				
+			}
+		}
+		
+		List<List<String>> list_final = new ArrayList<>();
+		
+		for (int t=0; t<list.size(); t++) {
+			List<String> l = new ArrayList<>();
+			for (int i=0; i<n; i++) {
+				l.add( new String(list.get(t)[i]) );
+			}
+			list_final.add( l );
+		}
+		
+		return list_final;
 	}
 	
 	public static char[][] CreateBoard (int n) {
@@ -123,8 +145,9 @@ class Solution {
 		return false;
 	}
 	
+	
 	public static void main (String[] args) {
-		
+		/*
 		List<char[][]> list = new ArrayList<>();
 		
 		int n = 4;
@@ -151,12 +174,13 @@ class Solution {
 		}
 		
 		
+		*/
+		int n = 5;
+		List<List<String>> list_final = solveNQueens(n);
 		PrintListList(list_final, n);
-		//PrintList(list, n);
-		//String s = new String(list.get(0)[0]);
-		//System.out.println(s);
 		
 	}
+	
 	
 }
 
