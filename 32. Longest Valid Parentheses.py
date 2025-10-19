@@ -1,16 +1,35 @@
 
 class Solution:
 	def longestValidParentheses (self, s: str) -> int:
-		self.count = 0
-		i = 0
 		self.s = s
 		self.solve()
-		return self.count
+		
+		return self.count()
 		
 
+	def count (self):
+		count = 0
+		largest = []
+		for i in range(len(self.s)):
+			if self.s[i] == '.':
+				count += 1
+			else:
+				largest.append(count)
+				count = 0
+			#print(i)
+		
+		val_max = 0
+		for i in largest:
+			if val_max < i:
+				val_max = i
+		
+		#print(val_max)
+		return val_max
+		
+		
 	def solve (self):
 		i = 0
-		while i < len(self.s)-1 :
+		while i < len(self.s) - 1 :
 			# find () pattern
 			if self.s[i:i+2] == '()':
 				self.s = substr_replace(self.s, '..', i, i+2)
@@ -22,16 +41,19 @@ class Solution:
 				i += 1
 		
 		i = 0
-		while i < len(self.s)-1 :
+		while i < len(self.s) - 1 :
 			# find (...) pattern
 			if self.s[i:i+1] == '(':
 				j = i + 1
-				print('b')
+				#print('b')
 				while j < len(self.s)-1 :
 					#print('c')
 					if self.s[j:j+1] == '.':
-						print('d')
+						#print('d ' + str(j))
+						
 						j += 1
+						#if j >= len(self.s):
+						#	break
 					elif self.s[j:j+1] == ')' :
 						self.s = substr_replace(self.s, '.', i, i+1)
 						self.s = substr_replace(self.s, '.', j, j+1)
@@ -39,7 +61,7 @@ class Solution:
 						print('e')
 						break
 					elif self.s[j:j+1] == '(' :
-						#i = 0
+						i += 1
 						print('f: ' + str(j))
 						break
 					#print('z')
@@ -53,14 +75,16 @@ def substr_replace (string_input: str, string_replace: str, start: int, end: int
 
 
 
-
-text = '())()()((()()()))()()()()()()())))(()(())))()())()()()())(((()))))()()())()()()()())))('
+text = '(()((('
+#text = '())()()((()()()))()()()()()()())))(()(())))()())()()()())(((()))))()()())()()()()())))('
 s = Solution()
 s.longestValidParentheses(text)
-print( s.count )
-print( s.s )
+#print( s.count )
+#print( s.s )
 
 #())()()((()()()))()()()()()()())))(()(())))()())()()()())(((()))))()()())()()()()())))(
 #())()()((()()()))()()()()()()())))(()(())))()())()()()())(((()))))()()())()()()()())))(
-#..)....((......))..............)))(..(..)))....)........)(((..))))......)..........)))(
+#..)............................)))........)....)........)........)......)..........)))(
+#..)............................)))........)....)........)........)......)..........)))(
+
 
