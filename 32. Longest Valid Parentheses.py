@@ -4,13 +4,13 @@ class Solution:
 	def longestValidParentheses (self, s: str) -> int:
 		print(s)
 		b = s
-		c = re.sub(r'\(\)', '..', b)
+		
 		while True:
-			b = c
-			c = re.sub(r'\((\.+?)\)', r'.\1.', b)
+			c = re.sub(r'\((\.*?)\)', r'.\1.', b)
 			if c == b:
 				break
-		print(c)
+			b = c
+		
 		self.s = c
 		return self.count()
 
@@ -26,18 +26,11 @@ class Solution:
 			else:
 				largest.append(count)
 				count = 0
-			#print(i)
-		
-		
+					
 		
 		val_max = 0
-		#for i in largest:
-		#	if val_max < i:
-		#		val_max = i
-		
 		val_max = max(largest)
 		
-		#print(self.s)
 		print(val_max)
 		return val_max
 
@@ -46,6 +39,7 @@ class Solution:
 t = ')(((((()())()()))()(()))('
 s = Solution()
 s.longestValidParentheses(t)
+
 '''
 )(((((()())()()))()(()))(
 )(......................(	ok
