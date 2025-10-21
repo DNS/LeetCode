@@ -26,7 +26,7 @@ class Solution:
 			else:
 				largest.append(count)
 				count = 0
-					
+		
 		
 		val_max = 0
 		val_max = max(largest)
