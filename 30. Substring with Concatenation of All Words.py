@@ -86,4 +86,18 @@ aaabbb[ccc][ddd]eee
 '''
 
 
+'''
+
+BEST WAY, using regex to find index!
+$text = 'aaabbbcccdddeee'
+$words = @('bbb','ccc')
+# find and return substring index
+$words | %{ [Regex]::Match($text, $_) }
+# find substring range 3 to 6
+$([Regex]::Match($text, '^(.{3,6})')).Value
+
+'''
+
+
+
 
