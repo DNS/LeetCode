@@ -74,14 +74,14 @@ fastest way !
 text = 'aaabbbcccdddeee'
 words = ['bbb','ccc']
 
-first find substring 'bbb' or 'ccc', if found then what is the next word in that text, check against words
+#1 first find substring 'bbb' then 'ccc', 
+#2 if found then what is the next word in that text (also remove the found from temporary words), if the next word not found repeat to #1
+
 aaa[bbb][ccc]dddeee
-     1    2
+     1    2         (ok)
 
-
-
-
-
+aaabbb[ccc][ddd]eee
+        1    X      (skip)
 
 '''
 
