@@ -1,114 +1,89 @@
-from typing import *
 
 
 class Solution:
-	def __init__ (self):
-		self.retval = []
-		self.words = []
-		self.joined = ''
-		self.words_len = 0
-	
-	def findSubstring (self, s: str, words: List[str]) -> List[int]:
-		self.s = s
-		
-		
-		self.words = words
-		self.words_len = len(self.words[0])
-		
-		self.permute(self.words, 0, self.words_len - 1 )
-		
-		# remove duplicates
-		seen = set()
-		self.retval = [x for x in self.retval if not (x in seen or seen.add(x))]
-		return self.retval
-	
-	def swap (self, arr, a, b) :
-		arr[a], arr[b] = arr[b], arr[a]
-	
-	def permute (self, arr, left, right) :
-		#print(arr)
-		#print(2)
-		j = ''.join(arr)
-		if j == self.joined:
-			return
-			
-		if left == right:
-			self.joined = ''.join(arr)
-			#print(self.joined)
-			self.findIndex()
-		else:
-			for i in range(left, right + 1) :
-				self.swap(arr, left, i)
-				self.permute(arr, left + 1, right)
-				self.swap(arr, left, i)		# backtrack
-	
-	
-	def findIndex (self) :
-		joined_length = len(self.joined)
-		#'''
-		for i in range(len(self.s)-joined_length+1) :
-			#print(self.s[i:i+joined_length])
-			if self.s[i:i+joined_length] == self.joined:
-				#print(i)
-				self.retval.append(i)
-		#'''
-		'''
-		i = 0
-		right = len(self.s)-joined_length+1
-		while True:
-			if self.s[i:i+joined_length] == self.joined:
-				self.retval.append(i)
-			if i >= right:
-				break
-			i += self.words_len
-		'''
+	def findSubstring(self, s: str, words: list[str]) -> list[int]:
+		# Basic checks
+		if not s or not words:
+			return []
+
+		word_len = len(words[0])
+		words_cnt = len(words)
+		total_len = word_len * words_cnt
+
+		# Build a frequency map of the words we need
+		need = {}
+		for w in words:
+			need[w] = need.get(w, 0) + 1
+
+		result = []
+
+		# We slide a window of size *total_len* but we start the scan
+		# at every possible offset inside a word (0 … word_len‑1).
+		# This avoids generating every permutation.
+		for offset in range(word_len):
+			left = offset               # start of the current window
+			matched = 0                 # how many words are matched so far
+			have = {}                   # frequency of words inside the window
+
+			# Walk through the string in steps of *word_len*
+			for right in range(offset, len(s) - word_len + 1, word_len):
+				cur_word = s[right:right + word_len]
+
+				# If the word is not part of *words*, reset the window
+				if cur_word not in need:
+					have.clear()
+					matched = 0
+					left = right + word_len
+					continue
+
+				# Add current word to the window count
+				have[cur_word] = have.get(cur_word, 0) + 1
+				matched += 1
+
+				# If we have more copies of *cur_word* than needed,
+				# shrink the window from the left until it is valid again
+				while have[cur_word] > need[cur_word]:
+					left_word = s[left:left + word_len]
+					have[left_word] -= 1
+					matched -= 1
+					left += word_len
+
+				# When the window size equals the total length,
+				# we found a valid start index
+				if matched == words_cnt:
+					result.append(left)
+
+		# Remove possible duplicates (kept for compatibility with original code)
+		return sorted(set(result))
 
 
+# -------------------------------------------------------------------------
 
-
+# Example usage with the huge test case from the original script
 if __name__ == "__main__":
-	#arr = [1, 2, 3]
-	#n = len(arr)
-	#permute(arr, 0, n - 1)
-	
-	#text = "wordgoodgoodgoodbestword"
-	#words = ["word","good","best","word"]
-	
-	# error
-	#text = "barfoothefoobarman"
-	#words = ["foo","bar"]
-	
-	#text = "barfoofoobarthefoobarman"
-	#words = ["bar","foo","the"]
-	
-	#text = "wordgoodgoodgoodbestword"
-	#words = ["word","good","best","good"]
-	
-	#text = "fffffffffffffffffffffffffffffffff"
-	#words = ["a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"]
-	
-	#text = "pjzkrkevzztxductzzxmxsvwjkxpvukmfjywwetvfnujhweiybwvvsrfequzkhossmootkmyxgjgfordrpapjuunmqnxxdrqrfgkrsjqbszgiqlcfnrpjlcwdrvbumtotzylshdvccdmsqoadfrpsvnwpizlwszrtyclhgilklydbmfhuywotjmktnwrfvizvnmfvvqfiokkdprznnnjycttprkxpuykhmpchiksyucbmtabiqkisgbhxngmhezrrqvayfsxauampdpxtafniiwfvdufhtwajrbkxtjzqjnfocdhekumttuqwovfjrgulhekcpjszyynadxhnttgmnxkduqmmyhzfnjhducesctufqbumxbamalqudeibljgbspeotkgvddcwgxidaiqcvgwykhbysjzlzfbupkqunuqtraxrlptivshhbihtsigtpipguhbhctcvubnhqipncyxfjebdnjyetnlnvmuxhzsdahkrscewabejifmxombiamxvauuitoltyymsarqcuuoezcbqpdaprxmsrickwpgwpsoplhugbikbkotzrtqkscekkgwjycfnvwfgdzogjzjvpcvixnsqsxacfwndzvrwrycwxrcismdhqapoojegggkocyrdtkzmiekhxoppctytvphjynrhtcvxcobxbcjjivtfjiwmduhzjokkbctweqtigwfhzorjlkpuuliaipbtfldinyetoybvugevwvhhhweejogrghllsouipabfafcxnhukcbtmxzshoyyufjhzadhrelweszbfgwpkzlwxkogyogutscvuhcllphshivnoteztpxsaoaacgxyaztuixhunrowzljqfqrahosheukhahhbiaxqzfmmwcjxountkevsvpbzjnilwpoermxrtlfroqoclexxisrdhvfsindffslyekrzwzqkpeocilatftymodgztjgybtyheqgcpwogdcjlnlesefgvimwbxcbzvaibspdjnrpqtyeilkcspknyylbwndvkffmzuriilxagyerjptbgeqgebiaqnvdubrtxibhvakcyotkfonmseszhczapxdlauexehhaireihxsplgdgmxfvaevrbadbwjbdrkfbbjjkgcztkcbwagtcnrtqryuqixtzhaakjlurnumzyovawrcjiwabuwretmdamfkxrgqgcdgbrdbnugzecbgyxxdqmisaqcyjkqrntxqmdrczxbebemcblftxplafnyoxqimkhcykwamvdsxjezkpgdpvopddptdfbprjustquhlazkjfluxrzopqdstulybnqvyknrchbphcarknnhhovweaqawdyxsqsqahkepluypwrzjegqtdoxfgzdkydeoxvrfhxusrujnmjzqrrlxglcmkiykldbiasnhrjbjekystzilrwkzhontwmehrfsrzfaqrbbxncphbzuuxeteshyrveamjsfiaharkcqxefghgceeixkdgkuboupxnwhnfigpkwnqdvzlydpidcljmflbccarbiegsmweklwngvygbqpescpeichmfidgsjmkvkofvkuehsmkkbocgejoiqcnafvuokelwuqsgkyoekaroptuvekfvmtxtqshcwsztkrzwrpabqrrhnlerxjojemcxel"
-	#words = ["dhvf","sind","ffsl","yekr","zwzq","kpeo","cila","tfty","modg","ztjg","ybty","heqg","cpwo","gdcj","lnle","sefg","vimw","bxcb"]
-	
-	s = Solution()
-	s.findSubstring(text, words)
-	print(s.retval)
+	text = "pjzkrkevzztxductzzxmxsvwjkxpvukmfjywwetvfnujhweiybwvvsrfequzkhossmootkmyxgjgfordrpapjuunmqnxxdrqrfgkrsjqbszgiqlcfnrpjlcwdrvbumtotzylshdvccdmsqoadfrpsvnwpizlwszrtyclhgilklydbmfhuywotjmktnwrfvizvnmfvvqfiokkdprznnnjycttprkxpuykhmpchiksyucbmtabiqkisgbhxngmhezrrqvayfsxauampdpxtafniiwfvdufhtwajrbkxtjzqjnfocdhekumttuqwovfjrgulhekcpjszyynadxhnttgmnxkduqmmyhzfnjhducesctufqbumxbamalqudeibljgbspeotkgvddcwgxidaiqcvgwykhbysjzlzfbupkqunuqtraxrlptivshhbihtsigtpipguhbhctcvubnhqipncyxfjebdnjyetnlnvmuxhzsdahkrscewabejifmxombiamxvauuitoltyymsarqcuuoezcbqpdaprxmsrickwpgwpsoplhugbikbkotzrtqkscekkgwjycfnvwfgdzogjzjvpcvixnsqsxacfwndzvrwrycwxrcismdhqapoojegggkocyrdtkzmiekhxoppctytvphjynrhtcvxcobxbcjjivtfjiwmduhzjokkbctweqtigwfhzorjlkpuuliaipbtfldinyetoybvugevwvhhhweejogrghllsouipabfafcxnhukcbtmxzshoyyufjhzadhrelweszbfgwpkzlwxkogyogutscvuhcllphshivnoteztpxsaoaacgxyaztuixhunrowzljqfqrahosheukhahhbiaxqzfmmwcjxountkevsvpbzjnilwpoermxrtlfroqoclexxisrdhvfsindffslyekrzwzqkpeocilatftymodgztjgybtyheqgcpwogdcjlnlesefgvimwbxcbzvaibspdjnrpqtyeilkcspknyylbwndvkffmzuriilxagyerjptbgeqgebiaqnvdubrtxibhvakcyotkfonmseszhczapxdlauexehhaireihxsplgdgmxfvaevrbadbwjbdrkfbbjjkgcztkcbwagtcnrtqryuqixtzhaakjlurnumzyovawrcjiwabuwretmdamfkxrgqgcdgbrdbnugzecbgyxxdqmisaqcyjkqrntxqmdrczxbebemcblftxplafnyoxqimkhcykwamvdsxjezkpgdpvopddptdfbprjustquhlazkjfluxrzopqdstulybnqvyknrchbphcarknnhhovweaqawdyxsqsqahkepluypwrzjegqtdoxfgzdkydeoxvrfhxusrujnmjzqrrlxglcmkiykldbiasnhrjbjekystzilrwkzhontwmehrfsrzfaqrbbxncphbzuuxeteshyrveamjsfiaharkcqxefghgceeixkdgkuboupxnwhnfigpkwnqdvzlydpidcljmflbccarbiegsmweklwngvygbqpescpeichmfidgsjmkvkofvkuehsmkkbocgejoiqcnafvuokelwuqsgkyoekaroptuvekfvmtxtqshcwsztkrzwrpabqrrhnlerxjojemcxel"
+	words = ["dhvf", "sind", "ffsl", "yekr", "zwzq", "kpeo", "cila", "tfty", "modg", "ztjg", "ybty", "heqg", "cpwo", "gdcj", "lnle", "sefg", "vimw", "bxcb"]
 
-dhvfsindffslyekrzwzqkpeocilatftymodgztjgybtyheqgcpwogdcjlnlesefgvimwbxcb
+	sol = Solution()
+	print(sol.findSubstring(text, words))
 
-pjzkrkevzztxductzzxmxsvwjkxpvukmfjywwetvfnujhweiybwvvsrfequzkhossmootkmy
-xgjgfordrpapjuunmqnxxdrqrfgkrsjqbszgiqlcfnrpjlcwdrvbumtotzylshdvccdmsqoa
-dfrpsvnwpizlwszrtyclhgilklydbmfhuywotjmktnwrfvizvnmfvvqfiokkdprznnnjyctt
-prkxpuykhmpchiksyucbmtabiqkisgbhxngmhezrrqvayfsxauampdpxtafniiwfvdufhtwa
-jrbkxtjzqjnfocdhekumttuqwovfjrgulhekcpjszyynadxhnttgmnxkduqmmyhzfnjhduce
-sctufqbumxbamalqudeibljgbspeotkgvddcwgxidaiqcvgwykhbysjzlzfbupkqunuqtrax
-rlptivshhbihtsigtpipguhbhctcvubnhqipncyxfjebdnjyetnlnvmuxhzsdahkrscewabe
-jifmxombiamxvauuitoltyymsarqcuuoezcbqpdaprxmsrickwpgwpsoplhugbikbkotzrtq
-kscekkgwjycfnvwfgdzogjzjvpcvixnsqsxacfwndzvrwrycwxrcismdhqapoojegggkocyr
-dtkzmiekhxoppctytvphjynrhtcvxcobxbcjjivtfjiwmduhzjokkbctweqtigwfhzorjlkp
-uuliaipbtfldinyetoybvugevwvhhhweejogrghllsouipabfafcxnhukcbtmxzshoyyufjh
-zadhrelweszbfgwpkzlwxkogyogutscvuhcllphshivnoteztpxsaoaacgxyaztuixhunrow
-zljqfqrahosheukhahhbiaxqzfmmwcjxountkevsvpbzjnilwpoermxrtlfroqoclexxisr
-dhvfsindffslyekrzwzqkpeocilatftymodgztjgybtyheqgcpwogdcjlnlesefgvimwbxcb
 
-zvaibspdjnrpqtyeilkcspknyylbwndvkffmzuriilxagyerjptbgeqgebiaqnvdubrtxibhvakcyotkfonmseszhczapxdlauexehhaireihxsplgdgmxfvaevrbadbwjbdrkfbbjjkgcztkcbwagtcnrtqryuqixtzhaakjlurnumzyovawrcjiwabuwretmdamfkxrgqgcdgbrdbnugzecbgyxxdqmisaqcyjkqrntxqmdrczxbebemcblftxplafnyoxqimkhcykwamvdsxjezkpgdpvopddptdfbprjustquhlazkjfluxrzopqdstulybnqvyknrchbphcarknnhhovweaqawdyxsqsqahkepluypwrzjegqtdoxfgzdkydeoxvrfhxusrujnmjzqrrlxglcmkiykldbiasnhrjbjekystzilrwkzhontwmehrfsrzfaqrbbxncphbzuuxeteshyrveamjsfiaharkcqxefghgceeixkdgkuboupxnwhnfigpkwnqdvzlydpidcljmflbccarbiegsmweklwngvygbqpescpeichmfidgsjmkvkofvkuehsmkkbocgejoiqcnafvuokelwuqsgkyoekaroptuvekfvmtxtqshcwsztkrzwrpabqrrhnlerxjojemcxel
+'''
+fastest way !
+
+text = 'aaabbbcccdddeee'
+words = ['bbb','ccc']
+
+first find substring 'bbb' or 'ccc', if found then what is the next word in that text, check against words
+aaa[bbb][ccc]dddeee
+     1    2
+
+
+
+
+
+
+'''
+
+
+
