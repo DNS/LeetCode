@@ -14,8 +14,6 @@ class Solution:
 			'M': 1000,
 		}
 		
-		print(roman['M'])
-		
 		for i in range(len(s), 0, -1):
 			c = s[i-1]
 			number = roman[c]
