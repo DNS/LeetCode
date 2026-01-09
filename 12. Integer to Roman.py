@@ -20,8 +20,8 @@ class Solution:
 		
 		for k in roman.keys():
 			while num >= k :
-				s = s + roman[k]
-				num = num - k
+				s += roman[k]
+				num -= k
 				
 			
 		return s
